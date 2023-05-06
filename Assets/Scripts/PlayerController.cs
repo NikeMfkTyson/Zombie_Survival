@@ -8,7 +8,11 @@ public class PlayerController : MonoBehaviour
     private GameObject bulletPrefab;
     private Rigidbody playerRb;
     private bool readyToShot = true;
-    public float _shotDelay = 1f;
+    private float _shotDelay = 0.5f;
+    private TypeOfPowerUp currentPowerUp = TypeOfPowerUp.none;
+    [SerializeField] private bool hasPowerup = false;
+    private float powerUpTime = 5;
+    private Coroutine powerupCountdown;
     
 
     void Start()
@@ -21,6 +25,7 @@ public class PlayerController : MonoBehaviour
     {
         Move();
         Shot();
+        SetBehaviour();
     }
 
     private void Move()
@@ -59,4 +64,50 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(_shotDelay);
         readyToShot = true;
     }
+
+    private void OnTriggerEnter(Collider other) 
+    {        
+        if(other.gameObject.CompareTag("PowerUp"))
+        {
+            hasPowerup = true;
+            currentPowerUp = other.gameObject.GetComponent<PowerUp>().typeOfPowerUp;
+            StartCoroutine(PowerUpCountDownRoutine(powerUpTime));
+            Destroy(other.gameObject);
+            if(powerupCountdown != null)
+            {
+                StopCoroutine(powerupCountdown);
+            }
+
+            powerupCountdown = StartCoroutine(PowerUpCountDownRoutine(powerUpTime));
+        }
+    }
+
+    private IEnumerator PowerUpCountDownRoutine(float delay)
+    {        
+        yield return new WaitForSeconds(delay);
+        currentPowerUp = TypeOfPowerUp.none;
+        hasPowerup = false;
+        
+    }
+
+    private void SetBehaviour()
+    {
+        switch(currentPowerUp)
+        {
+            case TypeOfPowerUp.none: 
+                speed = 5f;
+                _shotDelay = 0.5f;
+                break;
+            case TypeOfPowerUp.shotSpeed:
+                speed = 5f;
+                _shotDelay = 0.2f;
+                break;
+            case TypeOfPowerUp.runSpeed:
+                speed = 7f;
+                _shotDelay = 0.5f;
+                break;
+        }        
+    }
+
+    
 }

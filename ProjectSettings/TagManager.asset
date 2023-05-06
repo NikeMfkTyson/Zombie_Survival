@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Ground
   - Bullet
+  - Zombie
+  - PowerUp
   layers:
   - Default
   - TransparentFX
@@ -14,8 +16,8 @@ TagManager:
   - Water
   - UI
   - Bullet
-  - 
-  - 
+  - Zombie
+  - Bound
   - 
   - 
   - 
