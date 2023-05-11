@@ -12,8 +12,4 @@ public class Riffle : Gun
     }
 
  
-    void Update()
-    {
-        
-    }
 }

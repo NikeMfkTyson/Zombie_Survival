@@ -11,9 +11,4 @@ public class Minigun : Gun
         rechargeTime = 5f;
     }
 
-   
-    void Update()
-    {
-        
-    }
 }

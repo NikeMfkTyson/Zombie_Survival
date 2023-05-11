@@ -9,6 +9,10 @@ TagManager:
   - Zombie
   - PowerUp
   - Gun
+  - Riffle
+  - Minigun
+  - Pistol
+  - Shotgun
   layers:
   - Default
   - TransparentFX

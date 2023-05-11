@@ -5,37 +5,45 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
     public GameObject[] powerUps;
-    private float spawnPos = 25;
+    public GameObject[] guns;
+    private float positionLimit = 25;
     public float timeToPowerUpSpawn = 10;
+    public float timeToGunSpawn = 33;
+    private Vector3 spawnPos;
+    private int index;
+
     void Start()
     {
-        
+        StartCoroutine(SpawnGun());
         StartCoroutine(SpawnNewPowerUp());
     }
 
     
-    void Update()
+
+    private void GenerateSpawnPos(GameObject[] mass)
     {
+        index = Random.Range(0, mass.Length);
+        float xPos = Random.Range(-positionLimit, positionLimit);
+        float zPos = Random.Range(-positionLimit, positionLimit);
+        spawnPos = new Vector3(xPos, 0, zPos);
+
         
-    }
-
-    private void SpawnPowerUp()
-    {
-        int index = Random.Range(0, powerUps.Length);
-        float xPos = Random.Range(-spawnPos, spawnPos);
-        float zPos = Random.Range(-spawnPos, spawnPos);
-        Vector3 spawnPoint = new Vector3(xPos, 0, zPos);
-
-        Instantiate(powerUps[index], spawnPoint, powerUps[index].transform.rotation);
     }
 
     public IEnumerator SpawnNewPowerUp()
     {
         yield return new WaitForSeconds(timeToPowerUpSpawn);
-        SpawnPowerUp();
+        GenerateSpawnPos(powerUps);
+        Instantiate(powerUps[index], spawnPos, powerUps[index].transform.rotation);
         StartCoroutine(SpawnNewPowerUp());
     }
 
-
+    public IEnumerator SpawnGun()
+    {
+        yield return new WaitForSeconds(timeToGunSpawn);
+        GenerateSpawnPos(guns);
+        Instantiate(guns[index], spawnPos, guns[index].transform.rotation);
+        StartCoroutine(SpawnGun());
+    }
 
 }

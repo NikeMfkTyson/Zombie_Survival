@@ -5,10 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float speed = 5;
-    // private GameObject bulletPrefab;
     private Rigidbody playerRb;
-    // private bool readyToShot = true;
-    // private float _shotDelay = 0.5f;
     private TypeOfPowerUp currentPowerUp = TypeOfPowerUp.none;
     public TypeOfGun currentGun = TypeOfGun.pistol;
     public bool hasFreezePowerUp = false;
@@ -30,7 +27,7 @@ public class PlayerController : MonoBehaviour
     {
         Move();
         gunScript.Shot();
-        SetBehaviour();
+        print(gunScript.currentAmountBullets);
     }
 
     private void Move()
@@ -48,33 +45,16 @@ public class PlayerController : MonoBehaviour
         // Вращение объекта на полученное количество градусов.
     }
 
-    // private void Shot()
-    // {        
-    //     if(Input.GetKey(KeyCode.Mouse0) && readyToShot)
-    //     {
-    //         bulletPrefab = ObjectPool.SharedInstance.GetPooledObject();
-    //         if(bulletPrefab != null)
-    //         {
-    //             bulletPrefab.transform.position = transform.position;
-    //             bulletPrefab.transform.rotation = transform.rotation;
-    //             bulletPrefab.SetActive(true);
-    //         }
-    //         readyToShot = false;
-    //         StartCoroutine(ShotDelay());
-    //     }
-    // }
-
-    // private IEnumerator ShotDelay()
-    // {
-    //     yield return new WaitForSeconds(_shotDelay);
-    //     readyToShot = true;
-    // }
-
     private void OnTriggerEnter(Collider other) 
     {        
         if(other.gameObject.CompareTag("PowerUp"))
         {
+            if(gunScript.hasPowerUp)
+            {                
+                gunScript.hasPowerUp = false;
+            }
             currentPowerUp = other.gameObject.GetComponent<PowerUp>().typeOfPowerUp;
+            SetBehaviour();
             StartCoroutine(PowerUpCountDownRoutine(powerUpTime));
             Destroy(other.gameObject);
             if(powerupCountdown != null)
@@ -85,10 +65,9 @@ public class PlayerController : MonoBehaviour
             powerupCountdown = StartCoroutine(PowerUpCountDownRoutine(powerUpTime));
         }
 
-        if(other.gameObject.CompareTag("Gun"))
+        else
         {
-            gunScript.isActive = false;
-            switch(other.gameObject.name)
+            switch(other.gameObject.tag)
             {
                 case "Pistol":
                 currentGun = TypeOfGun.pistol;                
@@ -107,7 +86,7 @@ public class PlayerController : MonoBehaviour
                 gunScript = GetComponent<Minigun>();
                 break;
             }
-            gunScript.isActive = true;
+            gunScript.NewGun();
             Destroy(other.gameObject);
         }
     }
@@ -116,8 +95,7 @@ public class PlayerController : MonoBehaviour
     {        
         yield return new WaitForSeconds(delay);
         currentPowerUp = TypeOfPowerUp.none;
-        hasFreezePowerUp = false;
-        
+        hasFreezePowerUp = false;        
     }
 
     private void SetBehaviour()
@@ -126,20 +104,16 @@ public class PlayerController : MonoBehaviour
         {
             case TypeOfPowerUp.none: 
                 speed = 5f;
-                // _shotDelay = 0.5f;
                 break;
             case TypeOfPowerUp.shotSpeed:
                 speed = 5f;
-
-                // _shotDelay = 0.2f;
+                gunScript.hasPowerUp = true;
                 break;
             case TypeOfPowerUp.runSpeed:
                 speed = 7f;
-                // _shotDelay = 0.5f;
                 break;
             case TypeOfPowerUp.freeze:
                 speed = 5f;
-                // _shotDelay = 0.5f;
                 hasFreezePowerUp = true;
                 break;
         }        

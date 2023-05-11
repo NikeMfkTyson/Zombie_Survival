@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4388486828770448287}
   m_Layer: 0
   m_Name: Riffle
-  m_TagString: Gun
+  m_TagString: Riffle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

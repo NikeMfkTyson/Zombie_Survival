@@ -33,21 +33,17 @@ public class Shotgun : Gun
 
     private void ShotgunBullet()
     {
-        bulletPrefab = ObjectPool.SharedInstance.GetPooledObject();
-        float angle = -5f;
-        Quaternion direction = Quaternion.Euler(0, angle, 0) * transform.rotation;
         for(int i = 0; i < 11; i++)
         {    
+            bulletPrefab = ObjectPool.SharedInstance.GetPooledObject();
             if(bulletPrefab != null)
             { 
                 bulletPrefab.transform.position = transform.position;
-                bulletPrefab.transform.rotation = direction;
-                direction = Quaternion.Euler(0f, angle + 5f, 0f) * bulletPrefab.transform.rotation;
-                print(direction.eulerAngles + "   " + transform.rotation.eulerAngles);
+                bulletPrefab.transform.rotation = Quaternion.Euler(0f, -5f + i, 0f) * transform.rotation;
                 bulletPrefab.SetActive(true);
             }
-
-            angle += 5f;
         }
     }
+
+    
 }
