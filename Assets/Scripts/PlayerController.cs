@@ -5,26 +5,31 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float speed = 5;
-    private GameObject bulletPrefab;
+    // private GameObject bulletPrefab;
     private Rigidbody playerRb;
-    private bool readyToShot = true;
-    private float _shotDelay = 0.5f;
+    // private bool readyToShot = true;
+    // private float _shotDelay = 0.5f;
     private TypeOfPowerUp currentPowerUp = TypeOfPowerUp.none;
-    [SerializeField] private bool hasPowerup = false;
+    public TypeOfGun currentGun = TypeOfGun.pistol;
+    public bool hasFreezePowerUp = false;
+    private int health;
     private float powerUpTime = 5;
     private Coroutine powerupCountdown;
+    private Gun gunScript;
     
 
     void Start()
     {
+        gunScript = GetComponent<Pistol>();
         playerRb = GetComponent<Rigidbody>();
+        health = 100;
         
     }
 
     void Update()
     {
         Move();
-        Shot();
+        gunScript.Shot();
         SetBehaviour();
     }
 
@@ -43,33 +48,32 @@ public class PlayerController : MonoBehaviour
         // Вращение объекта на полученное количество градусов.
     }
 
-    private void Shot()
-    {        
-        if(Input.GetKey(KeyCode.Mouse0) && readyToShot)
-        {
-            bulletPrefab = ObjectPool.SharedInstance.GetPooledObject();
-            if(bulletPrefab != null)
-            {
-                bulletPrefab.transform.position = transform.position;
-                bulletPrefab.transform.rotation = transform.rotation;
-                bulletPrefab.SetActive(true);
-            }
-            readyToShot = false;
-            StartCoroutine(ShotDelay());
-        }
-    }
+    // private void Shot()
+    // {        
+    //     if(Input.GetKey(KeyCode.Mouse0) && readyToShot)
+    //     {
+    //         bulletPrefab = ObjectPool.SharedInstance.GetPooledObject();
+    //         if(bulletPrefab != null)
+    //         {
+    //             bulletPrefab.transform.position = transform.position;
+    //             bulletPrefab.transform.rotation = transform.rotation;
+    //             bulletPrefab.SetActive(true);
+    //         }
+    //         readyToShot = false;
+    //         StartCoroutine(ShotDelay());
+    //     }
+    // }
 
-    private IEnumerator ShotDelay()
-    {
-        yield return new WaitForSeconds(_shotDelay);
-        readyToShot = true;
-    }
+    // private IEnumerator ShotDelay()
+    // {
+    //     yield return new WaitForSeconds(_shotDelay);
+    //     readyToShot = true;
+    // }
 
     private void OnTriggerEnter(Collider other) 
     {        
         if(other.gameObject.CompareTag("PowerUp"))
         {
-            hasPowerup = true;
             currentPowerUp = other.gameObject.GetComponent<PowerUp>().typeOfPowerUp;
             StartCoroutine(PowerUpCountDownRoutine(powerUpTime));
             Destroy(other.gameObject);
@@ -80,13 +84,39 @@ public class PlayerController : MonoBehaviour
 
             powerupCountdown = StartCoroutine(PowerUpCountDownRoutine(powerUpTime));
         }
+
+        if(other.gameObject.CompareTag("Gun"))
+        {
+            gunScript.isActive = false;
+            switch(other.gameObject.name)
+            {
+                case "Pistol":
+                currentGun = TypeOfGun.pistol;                
+                gunScript = GetComponent<Pistol>();
+                break;
+                case "Shotgun":
+                currentGun = TypeOfGun.shotgun;
+                gunScript = GetComponent<Shotgun>();
+                break;
+                case "Riffle":
+                currentGun = TypeOfGun.rifle;
+                gunScript = GetComponent<Riffle>();
+                break;
+                case "Minigun":
+                currentGun = TypeOfGun.minigun;
+                gunScript = GetComponent<Minigun>();
+                break;
+            }
+            gunScript.isActive = true;
+            Destroy(other.gameObject);
+        }
     }
 
     private IEnumerator PowerUpCountDownRoutine(float delay)
     {        
         yield return new WaitForSeconds(delay);
         currentPowerUp = TypeOfPowerUp.none;
-        hasPowerup = false;
+        hasFreezePowerUp = false;
         
     }
 
@@ -96,17 +126,31 @@ public class PlayerController : MonoBehaviour
         {
             case TypeOfPowerUp.none: 
                 speed = 5f;
-                _shotDelay = 0.5f;
+                // _shotDelay = 0.5f;
                 break;
             case TypeOfPowerUp.shotSpeed:
                 speed = 5f;
-                _shotDelay = 0.2f;
+
+                // _shotDelay = 0.2f;
                 break;
             case TypeOfPowerUp.runSpeed:
                 speed = 7f;
-                _shotDelay = 0.5f;
+                // _shotDelay = 0.5f;
+                break;
+            case TypeOfPowerUp.freeze:
+                speed = 5f;
+                // _shotDelay = 0.5f;
+                hasFreezePowerUp = true;
                 break;
         }        
+    }
+
+    private void OnCollisionStay(Collision other) 
+    {
+        if(other.gameObject.CompareTag("Zombie"))
+        {
+            health -= other.gameObject.GetComponent<ZombieController>().strength;
+        }
     }
 
     

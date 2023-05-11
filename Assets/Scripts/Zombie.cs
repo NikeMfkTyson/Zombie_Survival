@@ -16,8 +16,8 @@ public class Zombie : MonoBehaviour
                 Debug.LogError("Speed can be in the range from 0 to 5");
         } 
     }
-    private float m_strangth;
-    public float strength
+    private int m_strangth;
+    public int strength
     {
         get {return m_strangth;}
         set 
@@ -34,7 +34,7 @@ public class Zombie : MonoBehaviour
         get {return m_health;}
         set 
         {
-            if(value > 0 && value <= 400)
+            if(value >= 1 && value <= 400)
                 m_health = value;
             else
                 Debug.LogError("Health can be in the range from 1 to 400");
@@ -45,9 +45,10 @@ public class Zombie : MonoBehaviour
     public void GetDamage(int damage)
     {
         m_health -= damage;
-        if(m_health < 0)
+        if(m_health <= 0)
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
+            m_health = health;
         }
     }
 

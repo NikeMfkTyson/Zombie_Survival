@@ -17,4 +17,6 @@ public class PowerUp : MonoBehaviour
         yield return new WaitForSeconds(10);
         Destroy(gameObject);
     }
+
+    
 }

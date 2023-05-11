@@ -6,9 +6,36 @@ public enum TypeOfZombie {zombie, zombieFast, zombieTank}
 public class ZombieController : Zombie
 {
     public TypeOfZombie typeOfZombie;
-    public GameObject player;
+    private GameObject player;
+    private PlayerController playerControllerScript;
     void Start()
     {        
+        player = GameObject.Find("Player");
+        playerControllerScript = GameObject.Find("Player").GetComponent<PlayerController>();
+        
+        SetBehaviour();          
+    }
+
+    void Update()
+    {
+
+        if(!playerControllerScript.hasFreezePowerUp)
+        {
+            Move(player);// MoveTowards
+        }
+    }
+
+    private void OnCollisionEnter(Collision other) 
+    {
+        if(other.gameObject.CompareTag("Bullet"))
+        {
+            other.gameObject.SetActive(false);
+            GetDamage(other.gameObject.GetComponent<Bullet>().damage);
+        }
+    }
+
+    private void SetBehaviour()
+    {
         if(typeOfZombie == TypeOfZombie.zombie)
         {
             health = 100;
@@ -26,11 +53,6 @@ public class ZombieController : Zombie
             health = 140;
             speed = 2;
             strength = 15;
-        }            
-    }
-
-    void Update()
-    {
-        Move(player);// MoveTowards
+        }  
     }
 }

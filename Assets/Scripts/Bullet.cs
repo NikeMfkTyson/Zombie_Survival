@@ -7,6 +7,7 @@ public class Bullet : MonoBehaviour
     [SerializeField] private float destroyDistance = 25;
     private float speed = 15;
     private Transform playerTransform;
+    public int damage = 30;
     
 
     private void Start() 
