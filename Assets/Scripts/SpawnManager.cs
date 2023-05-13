@@ -6,7 +6,8 @@ public class SpawnManager : MonoBehaviour
 {
     public GameObject[] powerUps;
     public GameObject[] guns;
-    private float positionLimit = 25;
+    private float positionLimitX = 15;
+    private float positionLimitZ = 25;
     public float timeToPowerUpSpawn = 10;
     public float timeToGunSpawn = 33;
     private Vector3 spawnPos;
@@ -23,8 +24,8 @@ public class SpawnManager : MonoBehaviour
     private void GenerateSpawnPos(GameObject[] mass)
     {
         index = Random.Range(0, mass.Length);
-        float xPos = Random.Range(-positionLimit, positionLimit);
-        float zPos = Random.Range(-positionLimit, positionLimit);
+        float xPos = Random.Range(-positionLimitX, positionLimitX);
+        float zPos = Random.Range(-positionLimitZ, positionLimitZ);
         spawnPos = new Vector3(xPos, 0, zPos);
 
         

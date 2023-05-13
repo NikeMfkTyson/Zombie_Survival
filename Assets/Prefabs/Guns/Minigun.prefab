@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5474689297782486734}
   - component: {fileID: 5652188814121541250}
+  - component: {fileID: -837576529454615533}
   m_Layer: 0
   m_Name: Minigun
   m_TagString: Minigun
@@ -49,6 +50,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.8356792, y: 1, z: 1.0671347}
   m_Center: {x: -0.123717725, y: 0, z: -0.03356737}
+--- !u!114 &-837576529454615533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5474689297782486732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b48232758e820a43b2e11ca149589a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5474689298989218943
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,23 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum TypeOfPowerUp {none, shotSpeed, runSpeed, freeze}
-public class PowerUp : MonoBehaviour
+public class DisappearGun : MonoBehaviour
 {
-    public TypeOfPowerUp typeOfPowerUp;
     private GameManager gameManagerScript;
-
-    private void Start() 
+    void Start()
     {
         gameManagerScript = GameObject.Find("GameManager").GetComponent<GameManager>();
-        StartCoroutine(Disappear());
+        StartCoroutine(Dissapear());
     }
 
-    private IEnumerator Disappear()
+    private IEnumerator Dissapear()
     {
         yield return new WaitForSeconds(gameManagerScript.timeToDisappearItems);
         Destroy(gameObject);
     }
-
-    
 }

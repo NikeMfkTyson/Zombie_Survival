@@ -12,25 +12,42 @@ public class GameManager : MonoBehaviour
     private PlayerController playerControllerScript;
     private SpawnManager spawnManagerScript;
     public GameObject gameOverCanvas;
+    public TextMeshProUGUI bulletsText;
     public TextMeshProUGUI waveText;
+    public TextMeshProUGUI playerHealthText;
     public GameObject waveTextCanvas;
+    public float timeToDisappearItems = 10f;
     private ZombieController zombieControllerScript;
 
     void Start()
     {
         playerControllerScript = GameObject.Find("Player").GetComponent<PlayerController>();
         spawnManagerScript = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
+
         gameOverCanvas.SetActive(false);
         waveTextCanvas.SetActive(false);
-        StartWave();
-        
+
+        StartWave();        
     }
 
     void Update()
     {
+        playerHealthText.text = "" + playerControllerScript.health / 10;
         waveText.text = "Wave " + wave;
+
+        if(playerControllerScript.gunScript.isRecharging)
+        {
+            bulletsText.text = "Recharging";
+        }
+        else
+        {
+            bulletsText.text = "" + playerControllerScript.gunScript.currentAmountBullets;
+        }                
+
         if(GameObject.FindGameObjectWithTag("Zombie") == null)
+        {
             WaveComplete();
+        }
     }
 
     public void StartWave()
@@ -61,10 +78,7 @@ public class GameManager : MonoBehaviour
 
     public void Exit()
     {
-        if(SceneManager.sceneCountInBuildSettings == 1)
-            SceneManager.LoadScene(0);
-        else
-            Application.Quit();
+        SceneManager.LoadScene(0);
     }
 
     private IEnumerator AppearDisappear(GameObject obj)

@@ -5,21 +5,21 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float speed = 5;
-    private Rigidbody playerRb;
     private TypeOfPowerUp currentPowerUp = TypeOfPowerUp.none;
     public TypeOfGun currentGun = TypeOfGun.pistol;
     public bool hasFreezePowerUp = false;
-    private int health;
+    public int health;
     private float powerUpTime = 5;
     private Coroutine powerupCountdown;
-    private Gun gunScript;
+    public Gun gunScript;
+    private GameManager gameManagerScript;
     
 
     void Start()
     {
+        gameManagerScript = GameObject.Find("GameManager").GetComponent<GameManager>();
         gunScript = GetComponent<Pistol>();
-        playerRb = GetComponent<Rigidbody>();
-        health = 100;
+        health = 1000;
         
     }
 
@@ -27,7 +27,12 @@ public class PlayerController : MonoBehaviour
     {
         Move();
         gunScript.Shot();
-        print(gunScript.currentAmountBullets);
+
+        if(health <= 0)
+        {
+            health = 0;
+            gameManagerScript.GameOver();
+        }
     }
 
     private void Move()
@@ -95,7 +100,8 @@ public class PlayerController : MonoBehaviour
     {        
         yield return new WaitForSeconds(delay);
         currentPowerUp = TypeOfPowerUp.none;
-        hasFreezePowerUp = false;        
+        hasFreezePowerUp = false;   
+        gunScript.hasPowerUp = false;     
     }
 
     private void SetBehaviour()
