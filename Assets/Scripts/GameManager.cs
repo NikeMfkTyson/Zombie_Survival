@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     private SpawnManager spawnManagerScript;
     public GameObject gameOverCanvas;
     public TextMeshProUGUI bulletsText;
+    public TextMeshProUGUI gunText;
     public TextMeshProUGUI waveText;
     public TextMeshProUGUI playerHealthText;
     public GameObject waveTextCanvas;
@@ -26,6 +27,8 @@ public class GameManager : MonoBehaviour
 
         gameOverCanvas.SetActive(false);
         waveTextCanvas.SetActive(false);
+
+        gunText.text = "Pistol";
 
         StartWave();        
     }
@@ -74,6 +77,11 @@ public class GameManager : MonoBehaviour
     public void RestartGame()
     {
         SceneManager.LoadScene(1);
+    }
+
+    public void GunText(string typeOfGun)
+    {
+        gunText.text = typeOfGun;
     }
 
     public void Exit()

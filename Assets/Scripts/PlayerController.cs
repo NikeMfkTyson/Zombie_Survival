@@ -77,18 +77,22 @@ public class PlayerController : MonoBehaviour
                 case "Pistol":
                 currentGun = TypeOfGun.pistol;                
                 gunScript = GetComponent<Pistol>();
+                gameManagerScript.GunText("Pistol");
                 break;
                 case "Shotgun":
                 currentGun = TypeOfGun.shotgun;
                 gunScript = GetComponent<Shotgun>();
+                gameManagerScript.GunText("Shotgun");
                 break;
                 case "Riffle":
                 currentGun = TypeOfGun.rifle;
                 gunScript = GetComponent<Riffle>();
+                gameManagerScript.GunText("Riffle");
                 break;
                 case "Minigun":
                 currentGun = TypeOfGun.minigun;
                 gunScript = GetComponent<Minigun>();
+                gameManagerScript.GunText("Minigun");
                 break;
             }
             gunScript.NewGun();
@@ -101,7 +105,8 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(delay);
         currentPowerUp = TypeOfPowerUp.none;
         hasFreezePowerUp = false;   
-        gunScript.hasPowerUp = false;     
+        gunScript.hasPowerUp = false; 
+        SetBehaviour();    
     }
 
     private void SetBehaviour()

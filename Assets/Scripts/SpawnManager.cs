@@ -31,7 +31,7 @@ public class SpawnManager : MonoBehaviour
         
     }
 
-    public IEnumerator SpawnNewPowerUp()
+    private IEnumerator SpawnNewPowerUp()
     {
         yield return new WaitForSeconds(timeToPowerUpSpawn);
         GenerateSpawnPos(powerUps);
@@ -39,7 +39,7 @@ public class SpawnManager : MonoBehaviour
         StartCoroutine(SpawnNewPowerUp());
     }
 
-    public IEnumerator SpawnGun()
+    private IEnumerator SpawnGun()
     {
         yield return new WaitForSeconds(timeToGunSpawn);
         GenerateSpawnPos(guns);
