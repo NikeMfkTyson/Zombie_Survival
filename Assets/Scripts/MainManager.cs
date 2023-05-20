@@ -18,6 +18,8 @@ public class MainManager : MonoBehaviour
         
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        LoadData();
     }
 
     [System.Serializable]
