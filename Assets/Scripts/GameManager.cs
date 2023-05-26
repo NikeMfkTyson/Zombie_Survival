@@ -9,19 +9,23 @@ public class GameManager : MonoBehaviour
 {
     public bool isGameActive = false;
     public bool isGameOver = false;
-    private bool isPaused = false;
+    // private bool isPaused = false;
+    public int score;
+    public int bestScore;
     public int wave = 1;
-    private PlayerController playerControllerScript;
-    private SpawnManager spawnManagerScript;
-    public GameObject gameOverCanvas;
+    public float timeToDisappearItems = 10f; 
     public TextMeshProUGUI bulletsText;
     public TextMeshProUGUI gameOverOrPauseText;
+    public TextMeshProUGUI yourScoreText;
     public TextMeshProUGUI gunText;
     public TextMeshProUGUI waveText;
     public TextMeshProUGUI playerHealthText;
+    public TextMeshProUGUI scoreText;
     public GameObject waveTextCanvas;
     public GameObject resumeButton;
-    public float timeToDisappearItems = 10f;
+    public GameObject gameOverCanvas;
+    private PlayerController playerControllerScript;
+    private SpawnManager spawnManagerScript;    
     private ZombieController zombieControllerScript;
 
     void Start()
@@ -42,6 +46,7 @@ public class GameManager : MonoBehaviour
     {
         playerHealthText.text = "" + playerControllerScript.health / 10;
         waveText.text = "Wave " + wave;
+        scoreText.text = "" + score;
 
         if(playerControllerScript.gunScript.isRecharging)
         {
@@ -63,6 +68,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void AddScore(int i)
+    {
+        score += i;
+    }
+
     public void StartWave()
     {
         StartCoroutine(AppearDisappear(waveTextCanvas));
@@ -79,6 +89,13 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         gameOverOrPauseText.text = "G A M E   O V E R";
+
+        if(score > MainManager.Instance.highScore)
+        {
+            yourScoreText.text = "New Record!";
+            MainManager.Instance.highScore = score;
+        }
+        
         isGameOver = true;
         isGameActive = false;
         Time.timeScale = 0;
@@ -90,8 +107,9 @@ public class GameManager : MonoBehaviour
     public void Pause()
     {
         gameOverOrPauseText.text = "P A U S E";
+        yourScoreText.text = "Best score: " + MainManager.Instance.playerName + "  " + MainManager.Instance.highScore;
         isGameActive = false;
-        isPaused = true;        
+        // isPaused = true;        
         gameOverCanvas.SetActive(true);
         resumeButton.SetActive(true);
         Time.timeScale = 0;
@@ -100,7 +118,7 @@ public class GameManager : MonoBehaviour
     public void Resume()
     {
         isGameActive = true;
-        isPaused = false;        
+        // isPaused = false;        
         gameOverCanvas.SetActive(false);
         Time.timeScale = 1;
     }

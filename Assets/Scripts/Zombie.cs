@@ -46,7 +46,7 @@ public class Zombie : MonoBehaviour
     {
         m_health -= damage;
         if(m_health <= 0)
-        {
+        {            
             gameObject.SetActive(false);
             m_health = health;
         }

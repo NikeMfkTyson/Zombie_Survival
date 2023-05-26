@@ -8,10 +8,12 @@ public class ZombieController : Zombie
     public TypeOfZombie typeOfZombie;
     private GameObject player;
     private PlayerController playerControllerScript;
+    private GameManager gameManagerScript;
     void Start()
     {        
         player = GameObject.Find("Player");
         playerControllerScript = GameObject.Find("Player").GetComponent<PlayerController>();
+        gameManagerScript = GameObject.Find("GameManager").GetComponent<GameManager>();
         
         SetBehaviour();          
     }
@@ -31,6 +33,7 @@ public class ZombieController : Zombie
         {
             other.gameObject.SetActive(false);
             GetDamage(other.gameObject.GetComponent<Bullet>().damage);
+            gameManagerScript.AddScore(other.gameObject.GetComponent<Bullet>().damage);
         }
     }
 
